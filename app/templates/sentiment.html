@@ -1,0 +1,164 @@
+{% extends 'base.html' %}
+{% block content %}
+
+<div class="card shadow-lg">
+    <div class="card-header text-center">
+        <h1 class="mb-0">
+            <i class="fas fa-brain me-2"></i>Duygu Analizi
+        </h1>
+        <small class="text-muted">Metninizin duygusal tonunu analiz edin</small>
+    </div>
+
+    <div class="card-body p-4">
+        <form method="POST">
+            <div class="mb-4">
+                <label for="text" class="form-label fw-bold">
+                    <i class="fas fa-edit me-2"></i>Lütfen analiz etmek istediğiniz metni girin:
+                </label>
+                <textarea
+                    id="text"
+                    name="text"
+                    class="form-control form-control-lg"
+                    rows="6"
+                    placeholder="Buraya analiz etmek istediğiniz metni yazın..."
+                    required
+                ></textarea>
+                <div class="form-text">
+                    <i class="fas fa-info-circle me-1"></i>
+                    En az birkaç kelime yazmanız önerilir.
+                </div>
+            </div>
+
+            <div class="text-center">
+                <button type="submit" class="btn btn-primary btn-lg px-5">
+                    <i class="fas fa-search me-2"></i>Analiz Et
+                </button>
+            </div>
+        </form>
+    </div>
+</div>
+
+{% if result %}
+<div class="card mt-4 shadow-lg">
+    <div class="card-header text-center">
+        <h3 class="mb-0">
+            <i class="fas fa-chart-bar me-2"></i>Analiz Sonucu
+        </h3>
+    </div>
+
+    <div class="card-body text-center p-4">
+        {% if 'POSITIVE' in result %}
+            <div class="result-positive">
+                <i class="fas fa-smile fa-3x mb-3" style="color: #28a745;"></i>
+                <h4 class="text-success mb-2">Pozitif Duygu</h4>
+                <p class="fs-5 text-success fw-bold">{{ result }}</p>
+                <div class="progress mb-2" style="height: 20px;">
+                    <div class="progress-bar bg-success" role="progressbar"
+                         style="width: {{ result.split(':')[1].split('}')[0] | float * 100 }}%">
+                    </div>
+                </div>
+                <small class="text-muted">Bu metin pozitif duygular içeriyor</small>
+            </div>
+        {% elif 'NEGATIVE' in result %}
+            <div class="result-negative">
+                <i class="fas fa-frown fa-3x mb-3" style="color: #dc3545;"></i>
+                <h4 class="text-danger mb-2">Negatif Duygu</h4>
+                <p class="fs-5 text-danger fw-bold">{{ result }}</p>
+                <div class="progress mb-2" style="height: 20px;">
+                    <div class="progress-bar bg-danger" role="progressbar"
+                         style="width: {{ result.split(':')[1].split('}')[0] | float * 100 }}%">
+                    </div>
+                </div>
+                <small class="text-muted">Bu metin negatif duygular içeriyor</small>
+            </div>
+        {% else %}
+            <div class="result-neutral">
+                <i class="fas fa-meh fa-3x mb-3" style="color: #6c757d;"></i>
+                <h4 class="text-secondary mb-2">Nötr Duygu</h4>
+                <p class="fs-5 text-secondary fw-bold">{{ result }}</p>
+                <div class="progress mb-2" style="height: 20px;">
+                    <div class="progress-bar bg-secondary" role="progressbar" style="width: 50%">
+                    </div>
+                </div>
+                <small class="text-muted">Bu metin nötr bir ton içeriyor</small>
+            </div>
+        {% endif %}
+    </div>
+
+    <div class="card-footer text-center">
+        <button onclick="location.reload()" class="btn btn-outline-secondary">
+            <i class="fas fa-redo me-2"></i>Yeni Analiz
+        </button>
+    </div>
+</div>
+{% endif %}
+
+<style>
+/* Ek özel stiller */
+.card {
+    border: none;
+    background: linear-gradient(135deg, #2d2d2d 0%, #383838 100%);
+}
+
+.card-header {
+    background: linear-gradient(135deg, #1f1f1f 0%, #2d2d2d 100%);
+    border-bottom: 2px solid #0d6efd;
+}
+
+.form-control {
+    transition: all 0.3s ease;
+    border-radius: 8px;
+}
+
+.form-control:focus {
+    transform: translateY(-2px);
+    box-shadow: 0 5px 15px rgba(13, 110, 253, 0.3);
+}
+
+.btn-primary {
+    background: linear-gradient(135deg, #0d6efd 0%, #0b5ed7 100%);
+    border: none;
+    border-radius: 25px;
+    transition: all 0.3s ease;
+}
+
+.btn-primary:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 5px 15px rgba(13, 110, 253, 0.4);
+}
+
+.progress {
+    background-color: #404040;
+    border-radius: 10px;
+}
+
+.result-positive, .result-negative, .result-neutral {
+    animation: fadeInUp 0.6s ease-out;
+}
+
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.fa-3x {
+    animation: pulse 2s infinite;
+}
+
+@keyframes pulse {
+    0% { transform: scale(1); }
+    50% { transform: scale(1.1); }
+    100% { transform: scale(1); }
+}
+</style>
+
+<!-- Font Awesome için CDN -->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+
+{% endblock %}
