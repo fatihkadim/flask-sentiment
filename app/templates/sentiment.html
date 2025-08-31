@@ -47,26 +47,26 @@
     </div>
 
     <div class="card-body text-center p-4">
-        {% if 'POSITIVE' in result %}
+        {% if result.label == 'POSITIVE' %}
             <div class="result-positive">
                 <i class="fas fa-smile fa-3x mb-3" style="color: #28a745;"></i>
                 <h4 class="text-success mb-2">Pozitif Duygu</h4>
-                <p class="fs-5 text-success fw-bold">{{ result }}</p>
+                <p class="fs-5 text-success fw-bold">{{ result.label }}</p>
                 <div class="progress mb-2" style="height: 20px;">
                     <div class="progress-bar bg-success" role="progressbar"
-                         style="width: {{ result.split(':')[1].split('}')[0] | float * 100 }}%">
+                         style="width: {{ result.score * 100 }}%">
                     </div>
                 </div>
                 <small class="text-muted">Bu metin pozitif duygular içeriyor</small>
             </div>
-        {% elif 'NEGATIVE' in result %}
+        {% elif result.label == 'NEGATIVE' %}
             <div class="result-negative">
                 <i class="fas fa-frown fa-3x mb-3" style="color: #dc3545;"></i>
                 <h4 class="text-danger mb-2">Negatif Duygu</h4>
-                <p class="fs-5 text-danger fw-bold">{{ result }}</p>
+                <p class="fs-5 text-danger fw-bold">{{ result.label }}</p>
                 <div class="progress mb-2" style="height: 20px;">
                     <div class="progress-bar bg-danger" role="progressbar"
-                         style="width: {{ result.split(':')[1].split('}')[0] | float * 100 }}%">
+                         style="width: {{ result.score * 100 }}%">
                     </div>
                 </div>
                 <small class="text-muted">Bu metin negatif duygular içeriyor</small>
@@ -75,7 +75,7 @@
             <div class="result-neutral">
                 <i class="fas fa-meh fa-3x mb-3" style="color: #6c757d;"></i>
                 <h4 class="text-secondary mb-2">Nötr Duygu</h4>
-                <p class="fs-5 text-secondary fw-bold">{{ result }}</p>
+                <p class="fs-5 text-secondary fw-bold">{{ result.label }}</p>
                 <div class="progress mb-2" style="height: 20px;">
                     <div class="progress-bar bg-secondary" role="progressbar" style="width: 50%">
                     </div>
@@ -158,7 +158,6 @@
 }
 </style>
 
-<!-- Font Awesome için CDN -->
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
 
 {% endblock %}
