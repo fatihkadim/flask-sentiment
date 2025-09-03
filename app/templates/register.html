@@ -1,10 +1,51 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Title</title>
-</head>
-<body>
+{% extends "base.html" %}
+{% block title %}Kayıt Ol{% endblock %}
 
-</body>
-</html>
+{% block content %}
+<div class="card my-5">
+    <div class="card-header text-center">
+        <h2>Kayıt Ol</h2>
+    </div>
+    <div class="card-body">
+        <form method="POST">
+            {{ form.hidden_tag() }}
+            <div class="mb-3">
+                {{ form.username.label(class="form-label") }}
+                {{ form.username(class="form-control") }}
+                {% for error in form.username.errors %}
+                    <div class="text-danger mt-1">{{ error }}</div>
+                {% endfor %}
+            </div>
+            <div class="mb-3">
+                {{ form.email_address.label(class="form-label") }}
+                {{ form.email_address(class="form-control") }}
+                {% for error in form.email_address.errors %}
+                    <div class="text-danger mt-1">{{ error }}</div>
+                {% endfor %}
+            </div>
+            <div class="mb-3">
+                {{ form.password1.label(class="form-label") }}
+                {{ form.password1(class="form-control") }}
+                {% for error in form.password1.errors %}
+                    <div class="text-danger mt-1">{{ error }}</div>
+                {% endfor %}
+            </div>
+            <div class="mb-3">
+                {{ form.password2.label(class="form-label") }}
+                {{ form.password2(class="form-control") }}
+                {% for error in form.password2.errors %}
+                    <div class="text-danger mt-1">{{ error }}</div>
+                {% endfor %}
+            </div>
+            <div class="d-grid gap-2">
+                {{ form.submit(class="btn btn-primary") }}
+            </div>
+        </form>
+    </div>
+    <div class="card-footer text-center">
+        <small class="text-muted">
+            Zaten bir hesabın var mı? <a href="{{ url_for('login_page') }}">Giriş Yap</a>
+        </small>
+    </div>
+</div>
+{% endblock %}

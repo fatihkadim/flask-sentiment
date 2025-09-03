@@ -3,7 +3,7 @@ from app import app ,db
 from flask import render_template,redirect,url_for,flash ,request,get_flashed_messages
 from app.models import User ,InputText, SentimentResult
 from app.forms import LoginForm, RegisterForm
-from flask_login import current_user,login_user,login_required
+from flask_login import current_user,login_user,login_required,logout_user
 from nlp.model import analyze_sentiment
 from nlp.preprocessing import clean_text
 from nlp.utils import format_result
@@ -15,6 +15,7 @@ def home_page():
     return render_template("home.html")
 
 @app.route("/sentiment", methods=['GET','POST'])
+@login_required
 def sentiment_page():
     if request.method == "POST":
         user_input = request.form.get('text')
@@ -31,13 +32,13 @@ def sentiment_page():
 def register_page():
     form = RegisterForm()
     if form.validate_on_submit():
-        user_to_add = User(username=form.username.data,email_address =form.email_address.data,password=form.password1.data)
+        user_to_add = User(username=form.username.data,email =form.email_address.data,password=form.password1.data)
         db.session.add(user_to_add)
         try:
             db.session.commit()
             login_user(user_to_add)
             flash(message="User created successfuly.",category="success")
-            return redirect(url_for(''))
+            return redirect(url_for('sentiment_page'))
 
         except IntegrityError:
             db.session.rollback()
@@ -49,12 +50,29 @@ def register_page():
         for err_msg in form.errors.values():
             flash(message=f'There was an error with creating a user: {err_msg}',category="danger")
 
-    return render_template("register.html")
+    return render_template("register.html",form = form)
 
 @app.route("/login",methods=['GET','POST'])
 def login_page():
-    return render_template("login.html")
+    form = LoginForm()
+    if form.validate_on_submit():
+        user_attempted = User.query.filter_by(username=form.username.data).first()
+        if user_attempted and user_attempted.check_password_correction(attempted_password = form.password.data):
+            login_user(user_attempted)
+            flash(message="Successfully logged",category="success")
+            return  redirect(url_for("sentiment_page"))
+
+        else:
+            flash(message="Username and password dont match. Please try again.",category='danger')
+    return render_template("login.html",form = form)
 
 @app.route("/history",methods=["GET"])
 def history_page():
     return render_template("history.html")
+
+
+@app.route("/logout")
+def logout_page():
+    logout_user()
+    flash(message='You have been logged out.',category='info')
+    return redirect(url_for('home_page'))
