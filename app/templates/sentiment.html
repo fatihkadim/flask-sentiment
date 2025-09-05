@@ -4,34 +4,34 @@
 <div class="card shadow-lg">
     <div class="card-header text-center">
         <h1 class="mb-0">
-            <i class="fas fa-brain me-2"></i>Duygu Analizi
+            <i class="fas fa-brain me-2"></i>Sentiment Analysis
         </h1>
-        <small class="text-muted">Metninizin duygusal tonunu analiz edin</small>
+        <small class="text-muted">Analyze the emotional tone of your text</small>
     </div>
 
     <div class="card-body p-4">
         <form method="POST">
             <div class="mb-4">
                 <label for="text" class="form-label fw-bold">
-                    <i class="fas fa-edit me-2"></i>Lütfen analiz etmek istediğiniz metni girin:
+                    <i class="fas fa-edit me-2"></i>Please enter the text you want to analyze:
                 </label>
                 <textarea
                     id="text"
                     name="text"
                     class="form-control form-control-lg"
                     rows="6"
-                    placeholder="Buraya analiz etmek istediğiniz metni yazın..."
+                    placeholder="Type the text you want to analyze here..."
                     required
                 ></textarea>
                 <div class="form-text">
                     <i class="fas fa-info-circle me-1"></i>
-                    En az birkaç kelime yazmanız önerilir.
+                    It's recommended to write at least a few words.
                 </div>
             </div>
 
             <div class="text-center">
                 <button type="submit" class="btn btn-primary btn-lg px-5">
-                    <i class="fas fa-search me-2"></i>Analiz Et
+                    <i class="fas fa-search me-2"></i>Analyze
                 </button>
             </div>
         </form>
@@ -42,7 +42,7 @@
 <div class="card mt-4 shadow-lg">
     <div class="card-header text-center">
         <h3 class="mb-0">
-            <i class="fas fa-chart-bar me-2"></i>Analiz Sonucu
+            <i class="fas fa-chart-bar me-2"></i>Analysis Result
         </h3>
     </div>
 
@@ -50,51 +50,51 @@
         {% if result.label == 'POSITIVE' %}
             <div class="result-positive">
                 <i class="fas fa-smile fa-3x mb-3" style="color: #28a745;"></i>
-                <h4 class="text-success mb-2">Pozitif Duygu</h4>
+                <h4 class="text-success mb-2">Positive Sentiment</h4>
                 <p class="fs-5 text-success fw-bold">{{ result.label }}</p>
                 <div class="progress mb-2" style="height: 20px;">
                     <div class="progress-bar bg-success" role="progressbar"
                          style="width: {{ result.score * 100 }}%">
                     </div>
                 </div>
-                <small class="text-muted">Bu metin pozitif duygular içeriyor</small>
+                <small class="text-muted">This text contains positive sentiment</small>
             </div>
         {% elif result.label == 'NEGATIVE' %}
             <div class="result-negative">
                 <i class="fas fa-frown fa-3x mb-3" style="color: #dc3545;"></i>
-                <h4 class="text-danger mb-2">Negatif Duygu</h4>
+                <h4 class="text-danger mb-2">Negative Sentiment</h4>
                 <p class="fs-5 text-danger fw-bold">{{ result.label }}</p>
                 <div class="progress mb-2" style="height: 20px;">
                     <div class="progress-bar bg-danger" role="progressbar"
                          style="width: {{ result.score * 100 }}%">
                     </div>
                 </div>
-                <small class="text-muted">Bu metin negatif duygular içeriyor</small>
+                <small class="text-muted">This text contains negative sentiment</small>
             </div>
         {% else %}
             <div class="result-neutral">
                 <i class="fas fa-meh fa-3x mb-3" style="color: #6c757d;"></i>
-                <h4 class="text-secondary mb-2">Nötr Duygu</h4>
+                <h4 class="text-secondary mb-2">Neutral Sentiment</h4>
                 <p class="fs-5 text-secondary fw-bold">{{ result.label }}</p>
                 <div class="progress mb-2" style="height: 20px;">
                     <div class="progress-bar bg-secondary" role="progressbar" style="width: 50%">
                     </div>
                 </div>
-                <small class="text-muted">Bu metin nötr bir ton içeriyor</small>
+                <small class="text-muted">This text has a neutral tone</small>
             </div>
         {% endif %}
     </div>
 
     <div class="card-footer text-center">
         <button onclick="location.reload()" class="btn btn-outline-secondary">
-            <i class="fas fa-redo me-2"></i>Yeni Analiz
+            <i class="fas fa-redo me-2"></i>New Analysis
         </button>
     </div>
 </div>
 {% endif %}
 
 <style>
-/* Ek özel stiller */
+/* Custom styles */
 .card {
     border: none;
     background: linear-gradient(135deg, #2d2d2d 0%, #383838 100%);

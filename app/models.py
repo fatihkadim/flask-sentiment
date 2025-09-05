@@ -9,7 +9,7 @@ def load_user(user_id):
 
 @login_manager.unauthorized_handler
 def unauthorized_callback():
-    flash(message="Bu sayfaya erişmek için giriş yapmanız gerekiyor.",category= "warning")
+    flash(message="You need to log in to access this page.", category="warning")
     return redirect(url_for("login_page"))
 
 class User(db.Model,UserMixin):
@@ -19,6 +19,7 @@ class User(db.Model,UserMixin):
     # Bir kullanıcının birden fazla InputText'i olabilir
     input_texts = db.relationship('InputText', backref='author', lazy=True)
     email = db.Column(db.String(120), unique=True, nullable=False)
+    credit = db.Column(db.Integer,default=100)
 
     @property
     def password(self):
@@ -31,11 +32,15 @@ class User(db.Model,UserMixin):
     def check_password_correction(self, attempted_password):
         return bcrypt.check_password_hash(self.password_hash, attempted_password)
 
+
 class InputText(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     text = db.Column(db.Text,nullable = False)
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
     sentiment_result = db.relationship('SentimentResult', backref='analyzed_text', uselist=False,cascade="all, delete-orphan")
+
+    def sent_assign(self,user,commit=True):
+        self.user_id = user.id
 
 
 class SentimentResult(db.Model):

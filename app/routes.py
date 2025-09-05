@@ -23,7 +23,23 @@ def sentiment_page():
             processed_text = clean_text(user_input)
             sentiment = analyze_sentiment(processed_text)
             result = format_result(sentiment)
-            return render_template('sentiment.html', result=sentiment)
+            try:
+                new_input = InputText(text=processed_text)
+                new_input.sent_assign(current_user)
+
+                new_result = SentimentResult(
+                    sentiment_score=result['score'],
+                    sentiment_label=result['label'],
+                    input_text_id=new_input.id
+                )
+                new_input.sentiment_result = new_result
+                db.session.add(new_input)
+                db.session.commit()
+            except Exception as e:
+                db.session.rollback()
+                flash(message=f"An error occurred: {str(e)}", category="danger")
+
+            return render_template('sentiment.html', result=result)
 
     return render_template("sentiment.html")
 
@@ -43,8 +59,7 @@ def register_page():
         except IntegrityError:
             db.session.rollback()
             flash(message="This email is already registered. Please try another email.", category="danger")
-
-        return redirect(url_for('sentiment_page'))
+            return redirect(url_for('register_page'))
 
     if form.errors != {}:
         for err_msg in form.errors.values():
@@ -68,7 +83,8 @@ def login_page():
 
 @app.route("/history",methods=["GET"])
 def history_page():
-    return render_template("history.html")
+    history = InputText.query.filter_by(user_id=current_user.id).all()
+    return render_template("history.html", history=history)
 
 
 @app.route("/logout")

@@ -3,7 +3,6 @@ from transformers import pipeline
 s_model = pipeline(
     "sentiment-analysis",
     model="cardiffnlp/twitter-roberta-base-sentiment",
-    device=0  # GPU kullanımı
 )
 
 labels = ['NEGATIVE', 'NEUTRAL', 'POSITIVE']

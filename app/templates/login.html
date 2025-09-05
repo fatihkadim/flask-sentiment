@@ -1,10 +1,10 @@
 {% extends "base.html" %}
-{% block title %}Giriş Yap{% endblock %}
+{% block title %}Login{% endblock %}
 
 {% block content %}
 <div class="card my-5">
     <div class="card-header text-center">
-        <h2>Giriş Yap</h2>
+        <h2>Login</h2>
     </div>
     <div class="card-body">
         <form method="POST">
@@ -30,7 +30,7 @@
     </div>
     <div class="card-footer text-center">
         <small class="text-muted">
-            Hesabın yok mu? <a href="{{ url_for('register_page') }}">Kayıt Ol</a>
+            Don't have an account? <a href="{{ url_for('register_page') }}">Register</a>
         </small>
     </div>
 </div>
