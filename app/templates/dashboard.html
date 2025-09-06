@@ -1,0 +1,335 @@
+{% extends "base.html" %}
+{% block content %}
+<style>
+    .dashboard-container {
+        max-width: 1200px;
+        margin: 0 auto;
+        padding: 20px;
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    }
+
+    .dashboard-title {
+        color: #2c3e50;
+        font-size: 2.5rem;
+        font-weight: 300;
+        margin-bottom: 30px;
+        text-align: center;
+        border-bottom: 3px solid #3498db;
+        padding-bottom: 15px;
+    }
+
+    .data-table {
+        width: 100%;
+        border-collapse: collapse;
+        background: white;
+        border-radius: 8px;
+        overflow: hidden;
+        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+        margin: 20px 0;
+    }
+
+    .data-table th {
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        color: white;
+        font-weight: 600;
+        padding: 18px 15px;
+        text-align: left;
+        font-size: 0.9rem;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+        border: none;
+    }
+
+    .data-table th:first-child {
+        border-radius: 8px 0 0 0;
+    }
+
+    .data-table th:last-child {
+        border-radius: 0 8px 0 0;
+    }
+
+    .data-table td {
+        padding: 15px;
+        border-bottom: 1px solid #e8e8e8;
+        background: white;
+        transition: background-color 0.3s ease;
+    }
+
+    .data-table tr:hover td {
+        background-color: #f8f9ff;
+    }
+
+    .data-table tr:last-child td {
+        border-bottom: none;
+    }
+
+    .text-cell {
+        max-width: 350px;
+        word-wrap: break-word;
+        line-height: 1.4;
+        color: #34495e;
+    }
+
+    .date-cell {
+        color: #7f8c8d;
+        font-size: 0.9rem;
+        white-space: nowrap;
+    }
+
+    .sentiment-cell {
+        text-align: center;
+        font-weight: 600;
+    }
+
+    .sentiment-positive {
+        color: #27ae60;
+        background: #d5f4e6;
+        padding: 8px 12px;
+        border-radius: 20px;
+        font-size: 0.85rem;
+        display: inline-block;
+    }
+
+    .sentiment-negative {
+        color: #e74c3c;
+        background: #fadbd8;
+        padding: 8px 12px;
+        border-radius: 20px;
+        font-size: 0.85rem;
+        display: inline-block;
+    }
+
+    .sentiment-neutral {
+        color: #f39c12;
+        background: #fdeaa7;
+        padding: 8px 12px;
+        border-radius: 20px;
+        font-size: 0.85rem;
+        display: inline-block;
+    }
+
+    .sentiment-pending {
+        color: #95a5a6;
+        background: #ecf0f1;
+        padding: 8px 12px;
+        border-radius: 20px;
+        font-size: 0.85rem;
+        display: inline-block;
+    }
+
+    .score-cell {
+        text-align: center;
+        font-weight: 600;
+        color: #2c3e50;
+    }
+
+    .score-high {
+        color: #27ae60;
+    }
+
+    .score-medium {
+        color: #f39c12;
+    }
+
+    .score-low {
+        color: #e74c3c;
+    }
+
+    .no-data {
+        text-align: center;
+        padding: 40px;
+        color: #95a5a6;
+        font-style: italic;
+    }
+
+    /* Skor özeti için yeni stiller */
+    .score-summary {
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        color: white;
+        border-radius: 8px;
+        padding: 25px;
+        margin-top: 30px;
+        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
+        text-align: center;
+    }
+
+    .score-summary h2 {
+        margin: 0 0 20px 0;
+        font-size: 1.5rem;
+        font-weight: 300;
+        color: white;
+    }
+
+    .summary-stats {
+        display: flex;
+        justify-content: space-around;
+        gap: 20px;
+        flex-wrap: wrap;
+    }
+
+    .stat-item {
+        background: rgba(255, 255, 255, 0.1);
+        border-radius: 8px;
+        padding: 20px;
+        min-width: 150px;
+        backdrop-filter: blur(10px);
+    }
+
+    .stat-value {
+        font-size: 2rem;
+        font-weight: 600;
+        margin-bottom: 5px;
+        color: #fff;
+    }
+
+    .stat-label {
+        font-size: 0.9rem;
+        color: rgba(255, 255, 255, 0.8);
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+    }
+
+    .emotional-emoji {
+        font-size: 3rem;
+        display: block;
+        margin-bottom: 10px;
+    }
+
+    @media (max-width: 768px) {
+        .dashboard-container {
+            padding: 10px;
+        }
+
+        .dashboard-title {
+            font-size: 2rem;
+        }
+
+        .data-table th,
+        .data-table td {
+            padding: 12px 8px;
+            font-size: 0.85rem;
+        }
+
+        .text-cell {
+            max-width: 200px;
+        }
+
+        .summary-stats {
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .stat-item {
+            min-width: 200px;
+        }
+    }
+</style>
+
+<div class="dashboard-container">
+    <h1 class="dashboard-title">Dashboard</h1>
+
+    <table class="data-table">
+        <thead>
+            <tr>
+                <th>Text</th>
+                <th>Created Date</th>
+                <th>Sentiment</th>
+                <th>Score</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for t in texts %}
+            <tr>
+                <td class="text-cell">{{ t.text }}</td>
+                <td class="date-cell">{{ t.created_at.strftime('%Y-%m-%d %H:%M:%S') if t.created_at else '' }}</td>
+                <td class="sentiment-cell">
+                    {% if t.sentiment_result %}
+                        {% if t.sentiment_result.sentiment_label == 'POSITIVE' %}
+                            <span class="sentiment-positive">Positive</span>
+                        {% elif t.sentiment_result.sentiment_label == 'NEGATIVE' %}
+                            <span class="sentiment-negative">Negative</span>
+                        {% elif t.sentiment_result.sentiment_label == 'NEUTRAL' %}
+                            <span class="sentiment-neutral">Neutral</span>
+                        {% else %}
+                            <span class="sentiment-pending">{{ t.sentiment_result.sentiment_label }}</span>
+                        {% endif %}
+                    {% else %}
+                        <span class="sentiment-pending">Not analyzed yet</span>
+                    {% endif %}
+                </td>
+                <td class="score-cell">
+                    {% if t.sentiment_result and t.sentiment_result.sentiment_score %}
+                        {% set score = t.sentiment_result.sentiment_score %}
+                        {% if score >= 0.7 %}
+                            <span class="score-high">{{ "%.2f"|format(score) }}</span>
+                        {% elif score >= 0.4 %}
+                            <span class="score-medium">{{ "%.2f"|format(score) }}</span>
+                        {% else %}
+                            <span class="score-low">{{ "%.2f"|format(score) }}</span>
+                        {% endif %}
+                    {% else %}
+                        <span style="color: #bfc3c7;">-</span>
+                    {% endif %}
+                </td>
+            </tr>
+            {% else %}
+            <tr>
+                <td colspan="4" class="no-data">No data available yet.</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+
+    <!-- Score Summary -->
+    {% if texts %}
+    <div class="score-summary">
+        <h2>Score Summary</h2>
+        <div class="summary-stats">
+            {% set ns = namespace(total_score=0, valid_scores=0) %}
+            {% for t in texts %}
+                {% if t.sentiment_result %}
+                    {% if t.sentiment_result.sentiment_score %}
+                        {% set ns.total_score = ns.total_score + t.sentiment_result.sentiment_score %}
+                        {% set ns.valid_scores = ns.valid_scores + 1 %}
+                    {% endif %}
+                {% endif %}
+            {% endfor %}
+
+            <div class="stat-item">
+                <div class="stat-value">
+                    {% if ns.valid_scores > 0 %}
+                        {{ "%.2f"|format(ns.total_score / ns.valid_scores) }}
+                    {% else %}
+                        0.00
+                    {% endif %}
+                </div>
+                <div class="stat-label">Average Score</div>
+            </div>
+
+            <div class="stat-item">
+                <div class="stat-value">
+                    <div class="stat-label">Emotional State</div>
+
+                    {% if ns.valid_scores > 0 %}
+                        {% set avg_score = ns.total_score / ns.valid_scores %}
+                        {% if avg_score < 0.4 %}
+                            <span class="emotional-emoji">😢</span>
+                            <span class="sentiment-negative">Negative</span>
+                        {% elif avg_score >= 0.4 and avg_score < 0.6 %}
+                            <span class="emotional-emoji">😐</span>
+                            <span class="sentiment-neutral">Neutral</span>
+                        {% else %}
+                            <span class="emotional-emoji">😊</span>
+                            <span class="sentiment-positive">Positive</span>
+                        {% endif %}
+                    {% else %}
+                        <span class="emotional-emoji">🤔</span>
+                        <span class="sentiment-pending">Unknown</span>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+    {% endif %}
+</div>
+{% endblock %}

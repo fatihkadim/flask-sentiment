@@ -2,6 +2,8 @@ from app import db,login_manager
 from flask import redirect,url_for,flash
 from app import bcrypt
 from flask_login import UserMixin
+from datetime import datetime,timezone
+
 
 @login_manager.user_loader
 def load_user(user_id):
@@ -37,6 +39,7 @@ class InputText(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     text = db.Column(db.Text,nullable = False)
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
+    created_at = db.Column(db.DateTime, default=datetime.utcnow)
     sentiment_result = db.relationship('SentimentResult', backref='analyzed_text', uselist=False,cascade="all, delete-orphan")
 
     def sent_assign(self,user,commit=True):
@@ -48,3 +51,4 @@ class SentimentResult(db.Model):
     sentiment_score = db.Column(db.Float)
     sentiment_label = db.Column(db.String(20))
     input_text_id = db.Column(db.Integer, db.ForeignKey('input_text.id'), nullable=False)
+    created_at = db.Column(db.DateTime, default=lambda: datetime.now(timezone.utc))

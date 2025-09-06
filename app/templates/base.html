@@ -1,170 +1,149 @@
 <!doctype html>
 <html lang="en">
-  <head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
+   <head>
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width, initial-scale=1">
+      <title>{% block title %}My NLP Project{% endblock %}</title>
+      <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+      <style>
+         body {
+         background-color: #121212;
+         color: #ffffff;
+         }
+         .navbar {
+         margin-bottom: 20px;
+         background-color: #1f1f1f !important;
+         }
+         .card {
+         border-radius: 12px;
+         box-shadow: 0 2px 6px rgba(0,0,0,0.3);
+         background-color: #2d2d2d;
+         border: 1px solid #404040;
+         color: #ffffff;
+         }
+         .card-header {
+         background-color: #383838;
+         border-bottom: 1px solid #404040;
+         color: #ffffff;
+         }
+         .btn-primary {
+         background-color: #0d6efd;
+         border-color: #0d6efd;
+         }
+         .btn-primary:hover {
+         background-color: #0b5ed7;
+         border-color: #0a58ca;
+         }
+         .form-control {
+         background-color: #383838;
+         border-color: #555555;
+         color: #ffffff;
+         }
+         .form-control:focus {
+         background-color: #404040;
+         border-color: #0d6efd;
+         color: #ffffff;
+         box-shadow: 0 0 0 0.2rem rgba(13, 110, 253, 0.25);
+         }
+         .form-label {
+         color: #ffffff;
+         }
+         .alert {
+         border: none;
+         border-radius: 8px;
+         }
+         .alert-success {
+         background-color: #1e4d3e;
+         color: #d4edda;
+         }
+         .alert-danger {
+         background-color: #4d1e1e;
+         color: #f8d7da;
+         }
+         .alert-info {
+         background-color: #1e3a4d;
+         color: #d1ecf1;
+         }
+         .container {
+         color: #ffffff;
+         display: flex;
+         flex-direction: column;
+         align-items: center;
+         justify-content: center;
+         min-height: 80vh;
+         text-align: center;
+         }
+         .content-wrapper {
+         max-width: 600px;
+         width: 100%;
+         }
+         .text-muted {
+         color: #adb5bd !important;
+         }
+         /* Link renklerini ayarla */
+         a {
+         color: #4fb3ff;
+         }
+         a:hover {
+         color: #72c5ff;
+         }
+         .nav-link {
+         color: #ffffff !important;
+         }
+         .nav-link:hover {
+         color: #4fb3ff !important;
+         }
+      </style>
+   </head>
+   <body>
+      <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+         <div class="container-fluid">
+            <a class="navbar-brand" href="/">NLP Project</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
+               data-bs-target="#navbarNav" aria-controls="navbarNav"
+               aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+               <ul class="navbar-nav ms-auto">
+                  {% if current_user.is_authenticated %}
+                  <li class="nav-item">
+                     <span class="nav-link">Welcome {{ current_user.username }}. You can do sentiment analysis.</span>
+                  </li>
+                  <li class="nav-item">
+                     <a class="nav-link" href="{{ url_for('logout_page') }}">Logout</a>
+                  </li>
+                  <li class="nav-item">
+                     <a class="nav-link" href="{{ url_for('dashboard_page') }}">Dashboard</a>
+                  </li>
 
-    <title>{% block title %}My NLP Project{% endblock %}</title>
-
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-
-    <style>
-      body {
-        background-color: #121212;
-        color: #ffffff;
-      }
-
-      .navbar {
-        margin-bottom: 20px;
-        background-color: #1f1f1f !important;
-      }
-
-      .card {
-        border-radius: 12px;
-        box-shadow: 0 2px 6px rgba(0,0,0,0.3);
-        background-color: #2d2d2d;
-        border: 1px solid #404040;
-        color: #ffffff;
-      }
-
-      .card-header {
-        background-color: #383838;
-        border-bottom: 1px solid #404040;
-        color: #ffffff;
-      }
-
-      .btn-primary {
-        background-color: #0d6efd;
-        border-color: #0d6efd;
-      }
-
-      .btn-primary:hover {
-        background-color: #0b5ed7;
-        border-color: #0a58ca;
-      }
-
-      .form-control {
-        background-color: #383838;
-        border-color: #555555;
-        color: #ffffff;
-      }
-
-      .form-control:focus {
-        background-color: #404040;
-        border-color: #0d6efd;
-        color: #ffffff;
-        box-shadow: 0 0 0 0.2rem rgba(13, 110, 253, 0.25);
-      }
-
-      .form-label {
-        color: #ffffff;
-      }
-
-      .alert {
-        border: none;
-        border-radius: 8px;
-      }
-
-      .alert-success {
-        background-color: #1e4d3e;
-        color: #d4edda;
-      }
-
-      .alert-danger {
-        background-color: #4d1e1e;
-        color: #f8d7da;
-      }
-
-      .alert-info {
-        background-color: #1e3a4d;
-        color: #d1ecf1;
-      }
-
-      .container {
-        color: #ffffff;
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        justify-content: center;
-        min-height: 80vh;
-        text-align: center;
-      }
-
-      .content-wrapper {
-        max-width: 600px;
-        width: 100%;
-      }
-
-      .text-muted {
-        color: #adb5bd !important;
-      }
-
-      /* Link renklerini ayarla */
-      a {
-        color: #4fb3ff;
-      }
-
-      a:hover {
-        color: #72c5ff;
-      }
-
-      .nav-link {
-        color: #ffffff !important;
-      }
-
-      .nav-link:hover {
-        color: #4fb3ff !important;
-      }
-    </style>
-  </head>
-  <body>
-    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
-      <div class="container-fluid">
-        <a class="navbar-brand" href="/">NLP Project</a>
-        <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
-                data-bs-target="#navbarNav" aria-controls="navbarNav"
-                aria-expanded="false" aria-label="Toggle navigation">
-          <span class="navbar-toggler-icon"></span>
-        </button>
-        <div class="collapse navbar-collapse" id="navbarNav">
-          <ul class="navbar-nav ms-auto">
-            {% if current_user.is_authenticated %}
-              <li class="nav-item">
-                <span class="nav-link">Welcome {{ current_user.username }}. You can do sentiment analysis.</span>
-              </li>
-              <li class="nav-item">
-                  <a class="nav-link" href="{{ url_for('logout_page') }}">Logout</a>
-                </li>
-            {% else %}
-            <li class="nav-item">
-              <a class="nav-link" href="{{ url_for('login_page') }}">Login</a>
-            </li>
-            <li class="nav-item">
-              <a class="nav-link" href="{{ url_for('register_page') }}">Register</a>
-            </li>
-            {% endif %}
-          </ul>
-        </div>
-      </div>
-    </nav>
-
-    <div class="container">
-      <div class="content-wrapper">
-        {% with messages = get_flashed_messages(with_categories=true) %}
-          {% if messages %}
+                  {% else %}
+                  <li class="nav-item">
+                     <a class="nav-link" href="{{ url_for('login_page') }}">Login</a>
+                  </li>
+                  <li class="nav-item">
+                     <a class="nav-link" href="{{ url_for('register_page') }}">Register</a>
+                  </li>
+                  {% endif %}
+               </ul>
+            </div>
+         </div>
+      </nav>
+      <div class="container">
+         <div class="content-wrapper">
+            {% with messages = get_flashed_messages(with_categories=true) %}
+            {% if messages %}
             {% for category, message in messages %}
-              <div class="alert alert-{{ category }} alert-dismissible fade show" role="alert">
-                {{ message }}
-                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-              </div>
+            <div class="alert alert-{{ category }} alert-dismissible fade show" role="alert">
+               {{ message }}
+               <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>
             {% endfor %}
-          {% endif %}
-        {% endwith %}
-
-        {% block content %}{% endblock %}
+            {% endif %}
+            {% endwith %}
+            {% block content %}{% endblock %}
+         </div>
       </div>
-    </div>
-
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-  </body>
+      <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+   </body>
 </html>

@@ -81,14 +81,14 @@ def login_page():
             flash(message="Username and password dont match. Please try again.",category='danger')
     return render_template("login.html",form = form)
 
-@app.route("/history",methods=["GET"])
-def history_page():
-    history = InputText.query.filter_by(user_id=current_user.id).all()
-    return render_template("history.html", history=history)
-
 
 @app.route("/logout")
 def logout_page():
     logout_user()
     flash(message='You have been logged out.',category='info')
     return redirect(url_for('home_page'))
+
+@app.route("/dashboard",methods=["GET","POST"])
+def dashboard_page():
+    user_texts = InputText.query.filter_by(user_id=current_user.id).all()
+    return render_template("dashboard.html", texts=user_texts)
