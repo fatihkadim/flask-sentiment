@@ -21,7 +21,6 @@ class User(db.Model,UserMixin):
     # Bir kullanıcının birden fazla InputText'i olabilir
     input_texts = db.relationship('InputText', backref='author', lazy=True)
     email = db.Column(db.String(120), unique=True, nullable=False)
-    credit = db.Column(db.Integer,default=100)
 
     @property
     def password(self):
