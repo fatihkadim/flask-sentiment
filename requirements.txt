@@ -10,4 +10,4 @@ python-dotenv==1.0.1
 contractions==0.1.73
 transformers==4.44.2
 tensorflow==2.20.0
-tf-keras==2.14.0
+tf-keras==2.20.1
