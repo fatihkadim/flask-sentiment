@@ -4,7 +4,7 @@ A production-ready Flask web app for sentiment analysis using HuggingFace Transf
 
 <img src="https://github.com/user-attachments/assets/42cd7ccb-557c-49e8-9146-75e7d4d6d2da" width="600" style="display:block; margin-bottom:20px;" alt="Ekran görüntüsü 1" />
 
-<img src="https://github.com/user-attachments/assets/dee41ee0-ded4-4942-9e80-f6d53198e052" width="400" style="display:block; margin-bottom:20px;" alt="Ekran görüntüsü 2" />
+<img width="884" height="843" alt="Ekran görüntüsü 2025-09-16 001437" src="https://github.com/user-attachments/assets/6bbe4566-1c64-44e0-80da-09de90ecbbd2" />
 
 <img src="https://github.com/user-attachments/assets/278f2824-e14c-49d6-85d0-feb0d2fef51b" width="500" style="display:block; margin-bottom:20px;" alt="Ekran görüntüsü 3" />
 
